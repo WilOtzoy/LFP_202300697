@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -112,27 +113,96 @@ public class Main {
     //mayor ataque
     public static void reporteMayorAtaque(){
 
-        // Ordenar la lista de estudiantes de mayor a menor según la edad
-        /*Collections.sort(personajeList, new Comparator<Personaje>() {
+        // Ordenar la lista de personajes de mayor a menor según el ataque
+        Collections.sort(personajeList, new Comparator<Personaje>() {
 
             @Override
             public int compare(Personaje p1, Personaje p2) {
-                return Integer.compare(p2.getAtaque(), p1.getAtaque()); // Ordenar de mayor a menor
+                // Ordenar de mayor a menor
+                return Integer.compare(p2.getAtaque(), p1.getAtaque());
             }
         });
-*/
-        //mio
-        Collections.sort(personajeList, Collections.reverseOrder());
+            //una vez ya lo tengo ordenado porcedo a crear mi html para mostrarlo en tabla
+        String contenido = "<html>";
+        contenido+="<head> <title>Personajes de combate</title><link rel=\"stylesheet\" href=\"myCSS.css\"></head>";
+        contenido+="<body>";
+        contenido+="<h1>Personajes con mayor ataque</h1>";
+        contenido+="<table border=\"solid\">";
+        contenido+="<tr>";
+        contenido+="<th>Nombre Personaje</th><th>Salud</th><th>Ataque</th><th>Defensa</th>";
+        contenido+="</tr>";
 
-
+            //la lista ya esta ordenada, procedo a imprimirlos en tabla
         for (Personaje personaje : personajeList){
-            System.out.println(personaje);
+            contenido+="<tr>";
+            contenido+="<td>"+personaje.nombre+"</td>";
+            contenido+="<td>"+personaje.salud+"</td>";
+            contenido+="<td>"+personaje.ataque+"</td>";
+            contenido+="<td>"+personaje.defensa+"</td>";
+            contenido+="</tr>";
         }
 
+        contenido+="</table>";
+        contenido+="</body>";
+        contenido+="</html>";
+        try (BufferedWriter escritor = new BufferedWriter(new FileWriter("reporteMayorAtaque.html"))) {
+            escritor.write(contenido);
+
+            System.out.println("El reporte de personajes con mayor ataque a sido generado correctamente");
+            // Abrir el archivo en el navegador predeterminado
+            File archivoHTML = new File("reporteMayorAtaque.html");
+            Desktop.getDesktop().browse(archivoHTML.toURI());
+        } catch (IOException e) {
+            System.out.println("Error al escribir en el archivo html: " + e.getMessage());
+        }
+
+        //contenido.concat("<html>");
     }
 
     //mayor defensa
     public static void reporteMayorDefensa(){
+        // Ordenar la lista de personajes de mayor a menor según la defensa
+        Collections.sort(personajeList, new Comparator<Personaje>() {
+
+            @Override
+            public int compare(Personaje p1, Personaje p2) {
+                // Ordenar de mayor a menor
+                return Integer.compare(p2.getDefensa(), p1.getDefensa());
+            }
+        });
+        //una vez ya lo tengo ordenado porcedo a crear mi html para mostrarlo en tabla
+        String contenido = "<html>";
+        contenido+="<head> <title>Personajes de combate</title><link rel=\"stylesheet\" href=\"myCSS.css\"></head>";
+        contenido+="<body>";
+        contenido+="<h1>Personajes con mayor defensa</h1>";
+        contenido+="<table border=\"solid\">";
+        contenido+="<tr>";
+        contenido+="<th>Nombre Personaje</th><th>Salud</th><th>Ataque</th><th>Defensa</th>";
+        contenido+="</tr>";
+
+        //la lista ya esta ordenada, procedo a imprimirlos en tabla
+        for (Personaje personaje : personajeList){
+            contenido+="<tr>";
+            contenido+="<td>"+personaje.nombre+"</td>";
+            contenido+="<td>"+personaje.salud+"</td>";
+            contenido+="<td>"+personaje.ataque+"</td>";
+            contenido+="<td>"+personaje.defensa+"</td>";
+            contenido+="</tr>";
+        }
+
+        contenido+="</table>";
+        contenido+="</body>";
+        contenido+="</html>";
+        try (BufferedWriter escritor = new BufferedWriter(new FileWriter("reporteMayorDefensa.html"))) {
+            escritor.write(contenido);
+
+            System.out.println("El reporte de personajes con mayor defensa a sido generado correctamente");
+            // Abrir el archivo en el navegador predeterminado
+            File archivoHTML = new File("reporteMayorDefensa.html");
+            Desktop.getDesktop().browse(archivoHTML.toURI());
+        } catch (IOException e) {
+            System.out.println("Error al escribir en el archivo html: " + e.getMessage());
+        }
 
     }
 
