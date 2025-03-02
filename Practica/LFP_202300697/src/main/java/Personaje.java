@@ -3,6 +3,7 @@ public class Personaje {
     int salud;
     int ataque;
     int defensa;
+    int vida;
 
     //constructor de mi clase Personaje
     public Personaje(String nombre, int salud, int ataque, int defensa) {
@@ -10,6 +11,7 @@ public class Personaje {
         this.salud = salud;
         this.ataque = ataque;
         this.defensa = defensa;
+        this.vida = salud*10;
     }
 
     public String getNombre() {
@@ -43,6 +45,12 @@ public class Personaje {
     public void setDefensa(int defensa) {
         this.defensa = defensa;
     }
+
+    //------------------------------------------
+    public boolean estaVivo() {
+        return vida > 0;
+    }
+
 
     @Override
     public String toString() {

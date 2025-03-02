@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -36,11 +37,20 @@ public class Main {
 
                 switch (opt) {
                     case 1:
-                        cargarArchivo();
+                        if (personajeList != null){
+                            personajeList.clear();
+                            cargarArchivo();
+                        }else{
+                            cargarArchivo();
+                        }
                         break;
                     case 2:
-                        // Jugar
-                        //escrituraArchivoHtml();
+                        if (personajeList != null){
+                            //el torneo comienza
+                            jugar(personajeList);
+                        }else{
+                            System.out.println("No hay personajes.");
+                        }
                         break;
                     case 3:
                         //reporte con mayor ataque
@@ -110,6 +120,59 @@ public class Main {
         }
     }
 
+    //jugar
+    public static void jugar(List<Personaje> personajes){
+        List<Personaje> sobrevivientes = new ArrayList<>(personajes);
+        int ronda = 1;
+        //que si exista un combate de pareja
+        while (sobrevivientes.size() > 1) {
+            System.out.println("\n* * *  R O N D A  " + ronda + " * * *");
+            List<Personaje> ganadores = new ArrayList<>();
+
+            for (int i = 0; i < sobrevivientes.size(); i += 2) {
+                if (i + 1 < sobrevivientes.size()) {
+                    Personaje ganador = combate(sobrevivientes.get(i), sobrevivientes.get(i + 1));
+                    ganadores.add(ganador);
+                } else {
+                    //indica q el numero es impar de sobrevivientes por lo que pasa el primero en atomaticamente a la sig, ronda
+                    System.out.println(sobrevivientes.get(i).nombre + " avanza automáticamente a la siguiente ronda.");
+                    ganadores.add(sobrevivientes.get(i));
+                }
+            }
+            sobrevivientes = ganadores;
+            ronda++;
+        }
+        //el tornero finaliza la lista se reducira en 1 por lo que estaria en la pos 0
+        System.out.println("\nEl campeón del torneo es: " + "'" +sobrevivientes.get(0).nombre + "'");
+    }
+    public static Personaje combate(Personaje p1, Personaje p2) {
+        System.out.println("\nBatalla entre: " + p1.nombre + " vs " + p2.nombre);
+
+        //evaluar que sus vidas no sean 0
+        while (p1.estaVivo() && p2.estaVivo()) {
+            atacar(p1, p2);
+            if (p2.estaVivo()) {
+                atacar(p2, p1);
+            }
+        }
+        Personaje ganador = p1.estaVivo() ? p1 : p2;
+        System.out.println("Ganador: " + ganador.nombre);
+        return ganador;
+    }
+
+    public static void atacar(Personaje jugador1, Personaje jugador2) {
+        int danio = jugador1.ataque - jugador2.defensa;
+        //evaluo si el daño>0  osea si hubo daño  procedo a restarlo en la vida del jugador2
+        if (danio > 0) {
+            jugador2.vida -= danio;
+            System.out.println(jugador1.nombre + " atacando  " +  jugador2.nombre + " causando un daño de: "  + danio + "pts. " + jugador2.nombre + " le queda " + jugador2.vida  + " de vida.");
+        } else {
+            //el jugador 1 no le causo daño a jugador 2
+            System.out.println(jugador1.nombre + " no pudo hacer daño a " + jugador2.nombre);
+
+        }
+    }
+
     //mayor ataque
     public static void reporteMayorAtaque(){
 
@@ -132,8 +195,14 @@ public class Main {
         contenido+="<th>Nombre Personaje</th><th>Salud</th><th>Ataque</th><th>Defensa</th>";
         contenido+="</tr>";
 
-            //la lista ya esta ordenada, procedo a imprimirlos en tabla
-        for (Personaje personaje : personajeList){
+            //aca creo otra lista donde solo halla los top 5  como ya esta ordenado solo paso lso prieros 5
+            List<Personaje> top5MayorAtaque = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+            top5MayorAtaque.add(personajeList.get(i));
+            }
+
+        //la lista ya esta ordenada, procedo a imprimirlos en tabla
+        for (Personaje personaje : top5MayorAtaque){
             contenido+="<tr>";
             contenido+="<td>"+personaje.nombre+"</td>";
             contenido+="<td>"+personaje.salud+"</td>";
@@ -180,8 +249,14 @@ public class Main {
         contenido+="<th>Nombre Personaje</th><th>Salud</th><th>Ataque</th><th>Defensa</th>";
         contenido+="</tr>";
 
+        //aca creo otra lista donde solo halla los top 5  como ya esta ordenado solo paso lso prieros 5
+        List<Personaje> top5MayorDefensa = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            top5MayorDefensa.add(personajeList.get(i));
+        }
+
         //la lista ya esta ordenada, procedo a imprimirlos en tabla
-        for (Personaje personaje : personajeList){
+        for (Personaje personaje : top5MayorDefensa){
             contenido+="<tr>";
             contenido+="<td>"+personaje.nombre+"</td>";
             contenido+="<td>"+personaje.salud+"</td>";
