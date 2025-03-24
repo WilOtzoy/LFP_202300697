@@ -29,6 +29,7 @@ public class AnalizadorLexico {
 
     public void analizar(StringBuilder cadena) {
         //this.buffer = cadena.toString();
+        System.out.println("estoy dentro de analizr");
         this.tokens.clear();
         this.errores.clear();
         this.estado = 0;
@@ -36,30 +37,30 @@ public class AnalizadorLexico {
         this.buffer = "";
 
         while(this.i < cadena.length()){
+            System.out.println("wile cadena");
             if(this.estado == 0){
+                System.out.println("estado 0");
                 S0(cadena.charAt(this.i));
             }
-            /*else if(this.estado == 1){
-                //S1(cadena.charAt(this.i));
+            else if(this.estado == 1){
+                S1(cadena.charAt(this.i));
             }
 
             else if(this.estado == 3){
-                //S3(cadena.charAt(this.i));
+                S3(cadena.charAt(this.i));
             }
             else if(this.estado == 4){
-                //S4(cadena.charAt(this.i));
+                S4(cadena.charAt(this.i));
             }
 
-            i = i+1;*/
+            i = i+1;
         }
 
     }
 
     // estados del AFD
     public void S0(char caracter){
-        //this.buffer = this.buffer + caracter;
-        //this.estado = 1;
-
+        System.out.println("estoy en estado 0 reconociendo s2 simbolos");
         //Reconocimiento de símbolos (S2)
 
         if(caracter == '{'){
@@ -82,19 +83,13 @@ public class AnalizadorLexico {
             this.buffer+=caracter;
             this.columna+=1;
             this.estado = 4;
-        }
-
-        /*
-        else if(Character.isLetter(caracter)){
+        }/*else if(Character.isLetter(caracter)){
+            //si es una letra concateno
             this.buffer+=caracter;
             this.columna+=1;
             this.estado = 1;
-        } */
-
-
-
+        }*/
         //Zona de caracteres especiales
-
         else if(caracter == '\n'){
             this.linea+=1;
             this.columna = 0;
@@ -105,13 +100,65 @@ public class AnalizadorLexico {
         else if(caracter == '\t'){
             this.columna += 4;
         }
-
         //Zona de errores
         else{
+            System.out.println("es un error no reconocido en los tokens");
             this.buffer+= caracter;
             this.agregarError(String.valueOf(caracter), linea, columna);
             this.buffer ="";
             this.columna+=1;
+        }
+    }
+
+    //estado 1
+    public void S1(char caracter){
+        if(Character.isLetter(caracter) || Character.isDigit(caracter)){
+            this.buffer+= caracter;
+            this.columna+=1;
+        }else{
+
+            if(this.buffer.equals("descripcion") || this.buffer.equals("estados")){ //Todas las palabras reservadas
+                this.agregarToken(this.buffer, "palabraReservada",linea, columna);
+            }else{
+                this.agregarToken(this.buffer, "identificador",linea, columna);
+            }
+
+            //this.agregarToken(this.buffer, "identificador",linea, columna);
+            this.estado = 0;
+            this.columna+=1;
+            this.i -= 1; //Regreso el índice pues ya terminé de reconocer el identificador
+        }
+    }
+
+    //estado 3
+    public void S3(char caracter){
+        if(caracter != '"'){
+            this.buffer+=caracter;
+            this.columna+=1;
+        }else{
+            //Aceptación
+            this.buffer+=caracter;
+            this.agregarToken(this.buffer,"cadena",linea, columna);
+            this.estado = 0;
+            this.columna+=1;
+
+        }
+    }
+
+    //estado 4
+    public void S4(char caracter){
+        if(caracter == '>'){
+            this.buffer+=caracter;
+            this.agregarToken(buffer, "flecha", this.linea, this.columna);
+            this.columna+=1;
+            this.estado = 0;
+        }
+
+        else{
+            this.buffer += caracter;
+            this.agregarError(String.valueOf(caracter), linea, columna);
+            this.columna+=1;
+            this.estado = 0;
         }
     }
 

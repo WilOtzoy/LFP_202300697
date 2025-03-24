@@ -23,7 +23,7 @@ public class Main {
                 analizadorLexico.analizar(content);
 
                 analizadorLexico.imprimirTokens();
-                System.out.println("");
+                System.out.println(" ");
 
                 analizadorLexico.imprimirErrores();
             } else {
