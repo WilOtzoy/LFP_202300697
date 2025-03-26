@@ -11,6 +11,38 @@ public class Error {
         this.columna = columna;
     }
 
+    public String getCaracter() {
+        return caracter;
+    }
+
+    public void setCaracter(String caracter) {
+        this.caracter = caracter;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getLinea() {
+        return linea;
+    }
+
+    public void setLinea(int linea) {
+        this.linea = linea;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public void setColumna(int columna) {
+        this.columna = columna;
+    }
+
     @Override
     public String toString() {
         return "Error{" +

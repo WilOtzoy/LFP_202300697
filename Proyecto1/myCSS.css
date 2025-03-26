@@ -1,0 +1,38 @@
+body{
+    background-color: #02000a;
+    color: #EBF4F6;
+}
+
+/* Estilo general para la tabla */
+table {
+    width: 50%; /* Ancho reducido al 50% */
+    margin: 20px auto; /* Centrar la tabla horizontalmente */
+    border-collapse: collapse; /* Colapsar bordes */
+}
+
+/* Estilo para las celdas de la tabla */
+th, td {
+    padding: 12px; /* Espaciado interno */
+    text-align: left; /* Alinear texto a la izquierda */
+    border: 1px solid #ddd; /* Bordes de las celdas */
+}
+
+/* Estilo para los encabezados de la tabla */
+th {
+    background-color: #cabd46; /* Color de fondo */
+}
+
+/* Estilo para las filas de la tabla */
+tr:nth-child(even) {
+    background-color: #37B7C3; /* Color de fondo para filas pares */
+}
+
+tr:hover {
+    background-color: #ffffff; /* Color de fondo al pasar el mouse */
+    color: #2e09d4;
+}
+
+/* Estilo para el título de la tabla */
+h1 {
+    text-align: center; /* Centrar el título */
+}
