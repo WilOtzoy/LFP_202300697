@@ -6,10 +6,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class Panel extends JFrame /*implements ActionListener*/ {
+public class Panel extends JFrame {
+     public  Map<String, AFD> automatas;
+
     AnalizadorLexico analizadorLexico = new AnalizadorLexico();
-    String contenido ="Grafica Automata";
+
+    String contenido ="";
 
     JLabel imageLabel;
     JTextArea textArea ;
@@ -46,8 +53,7 @@ public class Panel extends JFrame /*implements ActionListener*/ {
         reportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aquí va el código que se ejecutará cuando se presione el botón
-
+                // evento
                 System.out.println("*** T O K E N S *** ");
                 //analizadorLexico.imprimirTokens();
                 analizadorLexico.reporteTokens();
@@ -83,7 +89,6 @@ public class Panel extends JFrame /*implements ActionListener*/ {
         centerPanel.add(scrollPane);
 
         // Cargargo una imagen del grafo en el JLabel
-
         imageLabel = new JLabel("GRAFO AFD");
         ImageIcon grafo = new ImageIcon("G1.jpg");
         imageLabel.setIcon(grafo);
@@ -99,6 +104,8 @@ public class Panel extends JFrame /*implements ActionListener*/ {
     }
 
     public void inicializar(){
+        automatas = new HashMap<>();
+
         //Crear el selector de archivos
         JFileChooser fileChooser = new JFileChooser();
         int selection = fileChooser.showOpenDialog(null);
@@ -121,8 +128,79 @@ public class Panel extends JFrame /*implements ActionListener*/ {
                     }
 
                     //System.out.println(content);
+                    //Analizo el contenido
                     analizadorLexico.analizar(content);
                     textArea.setText(content.toString());
+
+                    List<Token> tokens = analizadorLexico.getTokens();
+                    //**************************************
+                    int i = 0;
+                    while(i < tokens.size()){
+                        if(tokens.get(i).getTipo().equals("identificador") && tokens.get(i+1).getTipo().equals("dosPuntos")){
+                            String nombre = tokens.get(i).getLexema();
+                            AFD afd = new AFD(nombre);
+
+                            i+=2;//Avanzo al token después de dosPuntos
+
+                            if(tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("inicial")){
+                                //Avanzo hasta después de dosPuntos
+                                i+=2;
+
+                                afd.setEstadoInicial(tokens.get(i).getLexema());
+                                i+=2;
+                            }
+
+                            if(tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("finales")){
+                                i+=3;
+                                while(!tokens.get(i).getTipo().equals("parentesisCierra")){
+                                    afd.agregarEstadoFinal(tokens.get(i).getLexema());
+
+                                    if(tokens.get(i+1).getTipo().equals("coma")){
+                                        i+=2;
+                                    }else{
+                                        i+=1;
+                                    }
+                                }
+
+                            }
+
+                            i+=2;
+
+                            if(tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("transiciones")){
+                                i+=1;
+
+                                while(!tokens.get(i+1).getTipo().equals("llaveCierre")){
+                                    i+=2;
+
+                                    String estadoActual = tokens.get(i).getLexema();
+
+                                    i+=3;
+
+                                    while(!tokens.get(i).getTipo().equals("parentesisCierra")){
+                                        String entrada = tokens.get(i).getLexema();
+
+                                        i+=2;
+                                        String estadoDestino = tokens.get(i).getLexema();
+
+                                        afd.agregarTransicion(estadoActual, entrada, estadoDestino);
+
+                                        if(tokens.get(i+1).getTipo().equals("coma")){
+                                            i+=2;
+                                        } else{
+                                            i+=1;
+                                        }
+                                    }
+                                }
+                            }
+
+                            automatas.put(nombre, afd);
+
+                        }
+
+                        i++;
+                    }
+
+                    //**************************************
 
                 } else {
                     System.out.println("El archivo no existe.");

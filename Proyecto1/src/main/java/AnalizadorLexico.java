@@ -191,6 +191,9 @@ public class AnalizadorLexico {
             System.out.println(error);
         }
     }*/
+    public List<Token> getTokens(){
+        return this.tokens;
+    }
 
     //metodos de html
     public void reporteTokens() {
