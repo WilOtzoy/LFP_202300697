@@ -82,10 +82,11 @@ public class Panel extends JFrame /*implements ActionListener*/ {
         JScrollPane scrollPane = new JScrollPane(textArea);
         centerPanel.add(scrollPane);
 
-        // Espacio para mostrar imagen del AFD
-        imageLabel = new JLabel("Aquí se mostrará el diagrama del AFD");
-        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imageLabel.setText(contenido);
+        // Cargargo una imagen del grafo en el JLabel
+
+        imageLabel = new JLabel("GRAFO AFD");
+        ImageIcon grafo = new ImageIcon("G1.jpg");
+        imageLabel.setIcon(grafo);
         centerPanel.add(imageLabel);
 
         add(centerPanel, BorderLayout.CENTER);

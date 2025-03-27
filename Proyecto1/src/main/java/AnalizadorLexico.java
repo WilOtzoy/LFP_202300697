@@ -56,10 +56,8 @@ public class AnalizadorLexico {
             else if(this.estado == 4){
                 S4(cadena.charAt(this.i));
             }
-
             i = i+1;
         }
-
     }
 
     // estados del AFD
@@ -167,15 +165,12 @@ public class AnalizadorLexico {
 
     //estado 4
     public void S4(char caracter){
-       // System.out.println("Estoy dentro de estado 4 ---------------");
         if(caracter == '>'){
             this.buffer+=caracter;
             this.agregarToken(buffer, "flecha", this.linea, this.columna);
             this.columna+=1;
             this.estado = 0;
-        }
-
-        else{
+        }else{
             this.buffer += caracter;
             this.agregarError(String.valueOf(caracter), linea, columna);
             this.columna+=1;
@@ -188,16 +183,14 @@ public class AnalizadorLexico {
         for(Token token: this.tokens){
             System.out.println(token);
         }
-    }*/
+    }
 
     //imprimo los errores encotrados
     public void imprimirErrores() {
         for(Error error: this.errores){
             System.out.println(error);
         }
-    }
-
-
+    }*/
 
     //metodos de html
     public void reporteTokens() {
@@ -267,6 +260,5 @@ public class AnalizadorLexico {
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo html: " + e.getMessage());
         }
-
     }
 }
