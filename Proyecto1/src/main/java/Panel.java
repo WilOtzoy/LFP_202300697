@@ -134,68 +134,70 @@ public class Panel extends JFrame {
 
                     List<Token> tokens = analizadorLexico.getTokens();
                     //**************************************
+
                     int i = 0;
                     while(i < tokens.size()){
-                        if(tokens.get(i).getTipo().equals("identificador") && tokens.get(i+1).getTipo().equals("dosPuntos")){
-                            String nombre = tokens.get(i).getLexema();
-                            AFD afd = new AFD(nombre);
+                        if (tokens.get(i).getTipo().equals("identificador"))
+                            if (tokens.get(i + 1).getTipo().equals("dosPuntos")) {
+                                String nombre = tokens.get(i).getLexema();
+                                AFD afd = new AFD(nombre);
 
-                            i+=2;//Avanzo al token después de dosPuntos
+                                i += 2;//Avanzo al token después de dosPuntos
 
-                            if(tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("inicial")){
-                                //Avanzo hasta después de dosPuntos
-                                i+=2;
+                                if (tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("inicial")) {
+                                    //Avanzo hasta después de dosPuntos
+                                    i += 2;
 
-                                afd.setEstadoInicial(tokens.get(i).getLexema());
-                                i+=2;
-                            }
-
-                            if(tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("finales")){
-                                i+=3;
-                                while(!tokens.get(i).getTipo().equals("parentesisCierra")){
-                                    afd.agregarEstadoFinal(tokens.get(i).getLexema());
-
-                                    if(tokens.get(i+1).getTipo().equals("coma")){
-                                        i+=2;
-                                    }else{
-                                        i+=1;
-                                    }
+                                    afd.setEstadoInicial(tokens.get(i).getLexema());
+                                    i += 2;
                                 }
 
-                            }
+                                if (tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("finales")) {
+                                    i += 3;
+                                    while (!tokens.get(i).getTipo().equals("parentesisCierra")) {
+                                        afd.agregarEstadoFinal(tokens.get(i).getLexema());
 
-                            i+=2;
+                                        if (tokens.get(i + 1).getTipo().equals("coma")) {
+                                            i += 2;
+                                        } else {
+                                            i += 1;
+                                        }
+                                    }
 
-                            if(tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("transiciones")){
-                                i+=1;
+                                }
 
-                                while(!tokens.get(i+1).getTipo().equals("llaveCierre")){
-                                    i+=2;
+                                i += 2;
 
-                                    String estadoActual = tokens.get(i).getLexema();
+                                if (tokens.get(i).getTipo().equals("palabraReservada") && tokens.get(i).getLexema().equals("transiciones")) {
+                                    i += 1;
 
-                                    i+=3;
+                                    while (!tokens.get(i + 1).getTipo().equals("llaveCierre")) {
+                                        i += 2;
 
-                                    while(!tokens.get(i).getTipo().equals("parentesisCierra")){
-                                        String entrada = tokens.get(i).getLexema();
+                                        String estadoActual = tokens.get(i).getLexema();
 
-                                        i+=2;
-                                        String estadoDestino = tokens.get(i).getLexema();
+                                        i += 3;
 
-                                        afd.agregarTransicion(estadoActual, entrada, estadoDestino);
+                                        while (!tokens.get(i).getTipo().equals("parentesisCierra")) {
+                                            String entrada = tokens.get(i).getLexema();
 
-                                        if(tokens.get(i+1).getTipo().equals("coma")){
-                                            i+=2;
-                                        } else{
-                                            i+=1;
+                                            i += 2;
+                                            String estadoDestino = tokens.get(i).getLexema();
+
+                                            afd.agregarTransicion(estadoActual, entrada, estadoDestino);
+
+                                            if (tokens.get(i + 1).getTipo().equals("coma")) {
+                                                i += 2;
+                                            } else {
+                                                i += 1;
+                                            }
                                         }
                                     }
                                 }
+
+                                automatas.put(nombre, afd);
+
                             }
-
-                            automatas.put(nombre, afd);
-
-                        }
 
                         i++;
                     }
