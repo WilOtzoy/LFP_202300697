@@ -13,6 +13,26 @@ public class Error {
         this.tipo = tipo;
     }
 
+    public String getCaracter() {
+        return caracter;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public int getLinea() {
+        return linea;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
     @Override
     public String toString() {
         return "Error{" +

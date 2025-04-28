@@ -45,11 +45,10 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Token{" +
+        return "Token: " +
                 "lexema='" + lexema + '\'' +
                 ", linea=" + linea +
                 ", columna=" + columna +
-                ", tipo='" + tipo + '\'' +
-                '}';
+                ", tipo='" + tipo + '\'' ;
     }
 }

@@ -1,9 +1,9 @@
-//public class GUIApp {
-//}
 import javax.swing.*;
         import java.awt.*;
         import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.List;
 
 public class GUIApp extends JFrame {
 
@@ -16,9 +16,11 @@ public class GUIApp extends JFrame {
     private JButton clearButton;
     private JButton analyzeButton;
 
-    private JButton about;
-    private JButton tokensReport;
-    private JButton errorReport;
+    private JButton aboutButton;
+    private JButton tokensReportButton;
+    private JButton errorReportButton;
+
+    AnalizadorLexico analizadorLexico = new AnalizadorLexico();
 
     public GUIApp() {
         // Configuración de la ventana
@@ -74,13 +76,13 @@ public class GUIApp extends JFrame {
         // Botones inferiores panel derecho
         JPanel buttonPanelRight = new JPanel();
         buttonPanelRight.setLayout(new FlowLayout(FlowLayout.LEFT));
-        tokensReport = new JButton("Reporte de tokens");
-        errorReport = new JButton("Reporte de errores");
-        about = new JButton("Acerca de");
+        tokensReportButton = new JButton("Reporte de tokens");
+        errorReportButton = new JButton("Reporte de errores");
+        aboutButton = new JButton("Acerca de");
 
-        buttonPanelRight.add(tokensReport);
-        buttonPanelRight.add(errorReport);
-        buttonPanelRight.add(about);
+        buttonPanelRight.add(tokensReportButton);
+        buttonPanelRight.add(errorReportButton);
+        buttonPanelRight.add(aboutButton);
 
         rightPanel.add(buttonPanelRight, BorderLayout.SOUTH);
 
@@ -100,7 +102,7 @@ public class GUIApp extends JFrame {
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea.setText("Archivo cargado exitosamente.");
+                cargarArchivo();
             }
         });
 
@@ -115,7 +117,36 @@ public class GUIApp extends JFrame {
         analyzeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea.setText("Análisis realizado exitosamente.");
+                //textArea.setText("Análisis realizado exitosamente.");
+                //analizadorLexico.analizar();
+
+                JOptionPane.showMessageDialog(null,"Archivo Analizado correctamente");
+            }
+        });
+
+        aboutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"Nombre: Wilson Wilfredo Pérez Otzoy \nCarnet: 202300697");
+            }
+        });
+
+        errorReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ERORRES************************");
+                analizadorLexico.imprimirErrores();
+                analizadorLexico.reporteErrores();
+            }
+        });
+
+        tokensReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ERRORES************************");
+                analizadorLexico.imprimirErrores();
+                analizadorLexico.reporteTokens();
+
             }
         });
 
@@ -123,9 +154,48 @@ public class GUIApp extends JFrame {
         setVisible(true);
     }
 
+    public void cargarArchivo(){
+        //Crear el selector de archivos
+        JFileChooser fileChooser = new JFileChooser();
+        int selection = fileChooser.showOpenDialog(null);
+
+        //Si el usuario seleccionó algun archivo
+        if (selection == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+            String ruta = archivoSeleccionado.getAbsolutePath();
+
+            //muevo a aca mi path
+            try {
+                //File archivo = new File("C:\\Users\\wilso\\Downloads\\Entrada1.lfp");
+                File archivo = new File(ruta);
+                StringBuilder content = new StringBuilder();
+                if (archivo.exists()) {
+                    BufferedReader br = new BufferedReader(new FileReader(archivo));
+                    String linea;
+                    while ((linea = br.readLine()) != null) {
+                        content.append(linea).append("\n");
+                    }
+
+                    System.out.println(content);
+                    //Analizo el contenido
+                    analizadorLexico.analizar(content);
+                    textArea.setText(content.toString());
+
+                    //List<Token> tokens = analizadorLexico.getTokens();
+                } else {
+                    System.out.println("El archivo no existe.");
+                }
+            }
+            catch (IOException e) {
+                System.out.println("Error al leer el archivo: " + e.getMessage());
+            }
+
+        }
+
+                }
     /*public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new GUIApp();
         });
     }*/
-}
+    }
