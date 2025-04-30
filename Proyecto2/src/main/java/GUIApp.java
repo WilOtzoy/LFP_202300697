@@ -21,6 +21,7 @@ public class GUIApp extends JFrame {
     private JButton errorReportButton;
 
     AnalizadorLexico analizadorLexico = new AnalizadorLexico();
+    AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokens());
 
     public GUIApp() {
         // Configuración de la ventana
@@ -39,7 +40,7 @@ public class GUIApp extends JFrame {
 
         // Área de texto
         textArea = new JTextArea("Área de texto");
-        textArea.setEditable(false);
+        textArea.setEditable(true);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -110,6 +111,9 @@ public class GUIApp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textArea.setText("");
+                analizadorLexico.getTokens().clear();
+                analizadorLexico.getErrores().clear();
+
                 imageLabel.setText("Área de imagen");
             }
         });
@@ -120,7 +124,14 @@ public class GUIApp extends JFrame {
                 //textArea.setText("Análisis realizado exitosamente.");
                 //analizadorLexico.analizar();
 
-                JOptionPane.showMessageDialog(null,"Archivo Analizado correctamente");
+                    StringBuilder contenido = new StringBuilder(textArea.getText());
+                    //contenido = textArea.getText().toString();
+                    analizadorLexico.analizar(contenido);
+
+                    analizadorSintactico.analizar();
+
+                    JOptionPane.showMessageDialog(null,"Archivo Analizado correctamente");
+
             }
         });
 
@@ -145,6 +156,7 @@ public class GUIApp extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("ERRORES************************");
                 analizadorLexico.imprimirErrores();
+
                 analizadorLexico.reporteTokens();
 
             }
@@ -178,7 +190,7 @@ public class GUIApp extends JFrame {
 
                     System.out.println(content);
                     //Analizo el contenido
-                    analizadorLexico.analizar(content);
+
                     textArea.setText(content.toString());
 
                     //List<Token> tokens = analizadorLexico.getTokens();

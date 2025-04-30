@@ -197,6 +197,14 @@ public class AnalizadorLexico {
         }
     }
 
+    public List<Token> getTokens(){
+        return this.tokens;
+    }
+
+    public List<Error> getErrores(){
+        return this.errores;
+    }
+
 
     public void reporteTokens() {
         String contenido = "<html>";
@@ -267,5 +275,6 @@ public class AnalizadorLexico {
             System.out.println("Error al escribir en el archivo html: " + e.getMessage());
         }
     }
+
 
 }
