@@ -1,24 +1,47 @@
+import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AnalizadorSintactico {
     private List<Token> tokens;
-    private List<Error> errores;
-    /*HashMap<String, World> mundos; //<IDentificador del mundo, mundo>
-    String mundoActual;*/
+    private List<Error> erroresSintacticos;
+    HashMap<String, World> mundos; //<IDentificador del mundo, mundo>
+    String mundoActual;
+
+//    AnalizadorLexico analizadorLexico = new AnalizadorLexico();
+
 
     public AnalizadorSintactico(List<Token> tokens) {
         this.tokens = tokens;
-        this.errores = new ArrayList<>();
-        /*this.mundos = new HashMap<>();
-        this.mundoActual = "";*/
+        this.erroresSintacticos = new ArrayList<>();
+        this.mundos = new HashMap<>();
+        this.mundoActual = "";
     }
 
     public void agregarError (Token token) {
-        this.errores.add(new Error(token.getLexema(), "no se esperaba el token " + token.getLexema(), token.getLinea(), token.getColumna(),"Sintatico"));
+        this.erroresSintacticos.add(new Error(token.getLexema(), "no se esperaba el token " + token.getLexema(), token.getLinea(), token.getColumna(),"Sintatico"));
     }
+
+    public List<Error> getErrores(){
+        return this.erroresSintacticos;
+    }
+
+    public void imprimirErroresSintacticos() {
+        System.out.println("ERRORES SINTACTICOS*************");
+        for(Error error: this.erroresSintacticos){
+            System.out.println(error);
+        }
+    }
+
     public void analizar(){
         this.INICIO();
+
+        this.mundos.get(mundoActual).graficar();
     }
 
     //NO TERMINALES
@@ -40,12 +63,17 @@ public class AnalizadorSintactico {
             tmp = this.tokens.removeFirst();
 
             if(tmp.getTipo().equals("cadena")){
+
+                this.mundoActual = tmp.getLexema();
+                this.mundos.put(mundoActual,new World());
+                //aca podria agregar la cadena del mundo para mi combobox
+
                 tmp = this.tokens.removeFirst();
 
                 if(tmp.getTipo().equals("llaveApertura")){
                     this.LOCACIONES();
-                    this.CONEXIONES();
-                    this.OBJETOS();
+                    //this.CONEXIONES();
+                    //this.OBJETOS();
 
                     tmp = this.tokens.removeFirst();
 
@@ -67,6 +95,7 @@ public class AnalizadorSintactico {
         }else{
             //AGregar error
             this.agregarError(tmp);
+
         }
     }
 
@@ -129,10 +158,10 @@ public class AnalizadorSintactico {
                                             tmp = this.tokens.removeFirst();
 
                                             if(tmp.getTipo().equals("parentesisCierre")){
-                                                /*//Crear una nueva locacion
+                                                //Crear una nueva locacion
                                                 Place place = new Place(identificador, tipo, x, y);
                                                 this.mundos.get(mundoActual).agregarPlace(identificador, place);
-                                                return;*/
+                                                return;
 
                                             }else{
                                                 //Error
@@ -174,6 +203,11 @@ public class AnalizadorSintactico {
         }else{
             //Error
             agregarError(tmp);
+            System.out.println("Error de pr_place------------");
+
+            getErrores();
+            imprimirErroresSintacticos();
+
         }
     }
 
@@ -194,4 +228,39 @@ public class AnalizadorSintactico {
 
     }
 
+
+    public void reporteErroresSintacticos() {
+        String contenido = "<html>";
+        contenido+="<head> <title>Errores Sintacticos</title><link rel=\"stylesheet\" href=\"myCSS.css\"></head>";
+        contenido+="<body>";
+        contenido+="<h1>Reporte de errores Sintacticos</h1>";
+        contenido+="<table border=\"solid\">";
+        contenido+="<tr>";
+        contenido+="<th>Caracter</th><th>Descripción</th><th>Linea</th><th>Columna</th><th>Tipo Error</th>";
+        contenido+="</tr>";
+
+        for (Error error : this.erroresSintacticos){
+            contenido+="<tr>";
+            contenido+="<td>"+error.getCaracter()+"</td>";
+            contenido+="<td>"+error.getDescripcion()+"</td>";
+            contenido+="<td>"+error.getLinea()+"</td>";
+            contenido+="<td>"+error.getColumna()+"</td>";
+            contenido+="<td>"+error.getTipo()+"</td>";
+            contenido+="</tr>";
+        }
+
+        contenido+="</table>";
+        contenido+="</body>";
+        contenido+="</html>";
+
+        try (BufferedWriter escritor = new BufferedWriter(new FileWriter("erroresSintacticos.html"))) {
+            escritor.write(contenido);
+            System.out.println("El reporte de errores sintacticos a sido generado correctamente");
+            // Abrir el archivo en el navegador predeterminado
+            File archivoHTML = new File("erroresSintacticos.html");
+            Desktop.getDesktop().browse(archivoHTML.toURI());
+        } catch (IOException e) {
+            System.out.println("Error al escribir en el archivo html: " + e.getMessage());
+        }
+    }
 }

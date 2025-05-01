@@ -133,7 +133,7 @@ public class AnalizadorLexico {
             }else if(this.buffer.equals("place")) {
                 this.agregarToken(this.buffer, "pr_place", linea, columna);
             }else if(this.buffer.equals("at")) {
-                this.agregarToken(this.buffer, "at", linea, columna);
+                this.agregarToken(this.buffer, "pr_at", linea, columna);
             }else if(this.buffer.equals("connect")) {
                 this.agregarToken(this.buffer, "pr_connect", linea, columna);
             }else if(this.buffer.equals("to")) {
@@ -241,7 +241,7 @@ public class AnalizadorLexico {
 
     }
 
-    public void reporteErrores() {
+    public void reporteErroresLexicos() {
         String contenido = "<html>";
         contenido+="<head> <title>Errores lexicos</title><link rel=\"stylesheet\" href=\"myCSS.css\"></head>";
         contenido+="<body>";
@@ -265,11 +265,11 @@ public class AnalizadorLexico {
         contenido+="</body>";
         contenido+="</html>";
 
-        try (BufferedWriter escritor = new BufferedWriter(new FileWriter("errores.html"))) {
+        try (BufferedWriter escritor = new BufferedWriter(new FileWriter("erroresLexicos.html"))) {
             escritor.write(contenido);
             System.out.println("El reporte de errores lexicos a sido generado correctamente");
             // Abrir el archivo en el navegador predeterminado
-            File archivoHTML = new File("errores.html");
+            File archivoHTML = new File("erroresLexicos.html");
             Desktop.getDesktop().browse(archivoHTML.toURI());
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo html: " + e.getMessage());

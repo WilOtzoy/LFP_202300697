@@ -1,6 +1,6 @@
 import javax.swing.*;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.List;
@@ -20,8 +20,11 @@ public class GUIApp extends JFrame {
     private JButton tokensReportButton;
     private JButton errorReportButton;
 
+    StringBuilder content = new StringBuilder();
+
     AnalizadorLexico analizadorLexico = new AnalizadorLexico();
     AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokens());
+
 
     public GUIApp() {
         // Configuración de la ventana
@@ -113,6 +116,8 @@ public class GUIApp extends JFrame {
                 textArea.setText("");
                 analizadorLexico.getTokens().clear();
                 analizadorLexico.getErrores().clear();
+                analizadorSintactico.getErrores().clear();
+
 
                 imageLabel.setText("Área de imagen");
             }
@@ -124,9 +129,10 @@ public class GUIApp extends JFrame {
                 //textArea.setText("Análisis realizado exitosamente.");
                 //analizadorLexico.analizar();
 
-                    StringBuilder contenido = new StringBuilder(textArea.getText());
+                    //StringBuilder contenido = new StringBuilder(textArea.getText());
+                    content = new StringBuilder(textArea.getText());
                     //contenido = textArea.getText().toString();
-                    analizadorLexico.analizar(contenido);
+                    analizadorLexico.analizar(content);
 
                     analizadorSintactico.analizar();
 
@@ -147,15 +153,19 @@ public class GUIApp extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("ERORRES************************");
                 analizadorLexico.imprimirErrores();
-                analizadorLexico.reporteErrores();
+                analizadorSintactico.imprimirErroresSintacticos();
+
+                analizadorLexico.reporteErroresLexicos();
+                analizadorSintactico.reporteErroresSintacticos();
+
             }
         });
 
         tokensReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("ERRORES************************");
-                analizadorLexico.imprimirErrores();
+                System.out.println("TOKES************************");
+                analizadorLexico.imprimirTokens();
 
                 analizadorLexico.reporteTokens();
 
@@ -180,7 +190,7 @@ public class GUIApp extends JFrame {
             try {
                 //File archivo = new File("C:\\Users\\wilso\\Downloads\\Entrada1.lfp");
                 File archivo = new File(ruta);
-                StringBuilder content = new StringBuilder();
+                //StringBuilder content = new StringBuilder();
                 if (archivo.exists()) {
                     BufferedReader br = new BufferedReader(new FileReader(archivo));
                     String linea;
@@ -205,9 +215,9 @@ public class GUIApp extends JFrame {
         }
 
                 }
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new GUIApp();
         });
-    }*/
+    }
     }

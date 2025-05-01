@@ -1,0 +1,4 @@
+digraph G {
+node [style=filled fontname="Times-Roman"];
+graph [layout=neato, splines=true, overlap=false];
+Montana[label="Montana", shape=triangle, fillcolor= sienna, pos="3,1!"];Volcan[label="Volcan", shape=doublecircle, fillcolor= orangered, pos="5,2!"];Aldea[label="Aldea", shape=house, fillcolor= burlywood, pos="2,3!"];Rio[label="Rio", shape=hexagon, fillcolor= deepskyblue, pos="1,2!"];IslaMisteriosa[label="IslaMisteriosa", shape=invtriangle, fillcolor= lightgoldenrod, pos="4,0!"];Entrada[label="Entrada", shape=parallelogram, fillcolor= forestgreen, pos="0,0!"];}
