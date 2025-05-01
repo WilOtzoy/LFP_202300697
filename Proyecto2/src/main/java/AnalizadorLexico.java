@@ -142,8 +142,8 @@ public class AnalizadorLexico {
                 this.agregarToken(this.buffer, "pr_with", linea, columna);
             }else if(this.buffer.equals("playa") || this.buffer.equals("cueva") || this.buffer.equals("templo") || this.buffer.equals("jungla") || this.buffer.equals("montana") || this.buffer.equals("pueblo") || this.buffer.equals("isla") || this.buffer.equals("rio") || this.buffer.equals("volcan") || this.buffer.equals("pantano")){
                 this.agregarToken(this.buffer, "pr_locacion", linea, columna);
-            }else if(this.buffer.equals("camino") || this.buffer.equals("puente") || this.buffer.equals("sendero") || this.buffer.equals("carretera") || this.buffer.equals("nado") || this.buffer.equals("lancha") || this.buffer.equals("teleferico")) {
-                this.agregarToken(this.buffer, "pr_camnio", linea, columna);
+            }else if(this.buffer.equals("\"camino\"") || this.buffer.equals("\"puente\"") || this.buffer.equals("sendero") || this.buffer.equals("\"carretera\"") || this.buffer.equals("\"nado\"") || this.buffer.equals("lancha") || this.buffer.equals("teleferico")) {
+                this.agregarToken(this.buffer, "pr_camino", linea, columna);
             }else if(this.buffer.equals("object")) {
                 this.agregarToken(this.buffer, "pr_object", linea, columna);
             }else if(this.buffer.equals("tesoro") || this.buffer.equals("llave") || this.buffer.equals("arma") || this.buffer.equals("objeto-magico") || this.buffer.equals("pocion") || this.buffer.equals("trampa") || this.buffer.equals("libro") || this.buffer.equals("herramienta") || this.buffer.equals("bandera") || this.buffer.equals("gema")) {

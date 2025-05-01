@@ -54,6 +54,7 @@ public class AnalizadorSintactico {
         this.MUNDO();
         this.MUNDOSP();
     }
+
     public void MUNDO(){
         System.out.println("MUNDO");
         Token tmp = this.tokens.removeFirst();
@@ -222,10 +223,70 @@ public class AnalizadorSintactico {
     }
 
     public void CONEXIONES(){
+        System.out.println("CONEXIONES");
+        this.CONEXION();
+        this.CONEXIONESP();
+    }
+
+    public void CONEXION(){
+        System.out.println("CONEXION");
+        String identificador;
+        String tipo;
+        String x;
+        String y;
+
+        Token tmp = this.tokens.removeFirst();
+
+        if(tmp.getTipo().equals("pr_connect")){
+            tmp = this.tokens.removeFirst();
+            if(tmp.getTipo().equals("identificador")){
+                identificador = tmp.getLexema(); //nombre del indentificador
+
+                tmp = this.tokens.removeFirst();
+                if(tmp.getTipo().equals("pr_to")){
+                    tmp = this.tokens.removeFirst();
+                    if(tmp.getTipo().equals("identificador")){
+                        tmp= this.tokens.removeFirst();
+                        if(tmp.getTipo().equals("pr_with")){
+                            tmp = this.tokens.removeFirst();
+                            if (tmp.getTipo().equals("pr_camino")){
+
+                                return;
+                            }else{agregarError(tmp);}
+                        }else {agregarError(tmp);}
+                    }else {agregarError(tmp);}
+                }else{agregarError(tmp);}
+            }else{agregarError(tmp);}
+        }else{agregarError(tmp);}
+    }
+    public void CONEXIONESP(){
+        System.out.println("CONEXIONESP");
+        if (this.tokens.get(0).getTipo().equals("pr_connect")){
+            this.CONEXION();
+            this.CONEXIONESP();
+        }else{
+            return;
+        }
+    }
+
+
+    public void OBJETOS(){
+        System.out.println("OBJETOS");
+        this.OBJETO();
+        this.OBJETOSP();
+    }
+
+    public void OBJETO(){
 
     }
-    public void OBJETOS(){
-
+    public void OBJETOSP(){
+        System.out.println("OBJETOS");
+        if (this.tokens.get(0).getTipo().equals("pr_object")){
+            this.OBJETO();
+            this.OBJETOSP();
+        }else{
+            return;
+        }
     }
 
 
