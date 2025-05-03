@@ -1,4 +1,4 @@
 digraph G {
-node [style=filled fontname="Times-Roman"];
+node [style=filled fontname="Noto Color Emoji"];
 graph [layout=neato, splines=true, overlap=false];
-Montana[label="Montana", shape=triangle, fillcolor= sienna, pos="3,1!"];Volcan[label="Volcan", shape=doublecircle, fillcolor= orangered, pos="5,2!"];Aldea[label="Aldea", shape=house, fillcolor= burlywood, pos="2,3!"];Rio[label="Rio", shape=hexagon, fillcolor= deepskyblue, pos="1,2!"];IslaMisteriosa[label="IslaMisteriosa", shape=invtriangle, fillcolor= lightgoldenrod, pos="4,0!"];Entrada[label="Entrada", shape=parallelogram, fillcolor= forestgreen, pos="0,0!"];}
+Jungla[label="Jungla", shape=parallelogram, fillcolor= forestgreen, pos="2,4!"];Pantano[label="Pantano", shape=trapezium, fillcolor= darkseagreen, pos="1,2!"];RioProfundo[label="RioProfundo", shape=hexagon, fillcolor= deepskyblue, pos="3,1!"];TemploAntiguo[label="TemploAntiguo", shape=octagon, fillcolor= gold, pos="4,3!"];CuevaOculta[label="CuevaOculta", shape=box, fillcolor= gray, pos="5,0!"];Base[label="Base", shape=doublecircle, fillcolor= orangered, pos="0,0!"];}

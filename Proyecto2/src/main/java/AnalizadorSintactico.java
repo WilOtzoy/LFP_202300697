@@ -62,37 +62,41 @@ public class AnalizadorSintactico {
         if(tmp.getTipo().equals("pr_world")){
             //Continuamos
             tmp = this.tokens.removeFirst();
+            // aca agregando las comillas
 
-            if(tmp.getTipo().equals("cadena")){
+                if (tmp.getTipo().equals("cadena")) {
 
-                this.mundoActual = tmp.getLexema();
-                this.mundos.put(mundoActual,new World());
-                //aca podria agregar la cadena del mundo para mi combobox
-
-                tmp = this.tokens.removeFirst();
-
-                if(tmp.getTipo().equals("llaveApertura")){
-                    this.LOCACIONES();
-                    this.CONEXIONES();
-                    this.OBJETOS();
+                    this.mundoActual = tmp.getLexema();
+                    this.mundos.put(mundoActual, new World());
+                    //aca podria agregar la cadena del mundo para mi combobox
 
                     tmp = this.tokens.removeFirst();
 
-                    if(tmp.getTipo().equals("llaveCierre")){
-                        //Continuo
-                        return;
-                    }else{
-                        //Agrego error
-                        this.agregarError(tmp);
-                    }
-                }else{
-                    //Agrego error
+                    //aca agrego mi otra comillas
+
+                        if (tmp.getTipo().equals("llaveApertura")) {
+                            this.LOCACIONES();
+                            this.CONEXIONES();
+                            this.OBJETOS();
+
+                            tmp = this.tokens.removeFirst();
+
+                            if (tmp.getTipo().equals("llaveCierre")) {
+                                //Continuo
+                                return;
+                            } else {
+                                //Agrego error
+                                this.agregarError(tmp);
+                            }
+                        } else {
+                            //Agrego error
+                            this.agregarError(tmp);
+                        }
+
+                } else {
+                    //Agregar error
                     this.agregarError(tmp);
                 }
-            }else{
-                //Agregar error
-                this.agregarError(tmp);
-            }
         }else{
             //AGregar error
             this.agregarError(tmp);

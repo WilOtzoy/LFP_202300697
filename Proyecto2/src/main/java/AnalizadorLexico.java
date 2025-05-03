@@ -85,7 +85,7 @@ public class AnalizadorLexico {
         }else if(caracter == '"'){
             this.buffer+=caracter;
             //agrego un toke commillas para validarlo en las conexiones
-            this.agregarToken(String.valueOf(caracter),"comillas",this.linea, this.columna);
+            //this.agregarToken(String.valueOf(caracter),"comillas",this.linea, this.columna);
             this.columna+=1;
             this.estado = 3;
         }else if(Character.isLetter(caracter)){
