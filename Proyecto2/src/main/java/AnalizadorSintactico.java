@@ -73,8 +73,8 @@ public class AnalizadorSintactico {
 
                 if(tmp.getTipo().equals("llaveApertura")){
                     this.LOCACIONES();
-                    //this.CONEXIONES();
-                    //this.OBJETOS();
+                    this.CONEXIONES();
+                    this.OBJETOS();
 
                     tmp = this.tokens.removeFirst();
 
@@ -104,6 +104,7 @@ public class AnalizadorSintactico {
         System.out.println("MUNDOSP");
         try{
             if(tokens.get(0).getTipo().equals("coma")){
+                System.out.println("segundo mundo ");
                 this.tokens.removeFirst();
                 this.MUNDO();
                 this.MUNDOSP();
@@ -230,28 +231,40 @@ public class AnalizadorSintactico {
 
     public void CONEXION(){
         System.out.println("CONEXION");
-        String identificador;
-        String tipo;
-        String x;
-        String y;
+        //String identificador;
+        String tipoCamino;
+        String placeA;
+        String placeB;
 
         Token tmp = this.tokens.removeFirst();
 
         if(tmp.getTipo().equals("pr_connect")){
             tmp = this.tokens.removeFirst();
             if(tmp.getTipo().equals("identificador")){
-                identificador = tmp.getLexema(); //nombre del indentificador
+                placeA = tmp.getLexema(); //nombre del place A
 
                 tmp = this.tokens.removeFirst();
                 if(tmp.getTipo().equals("pr_to")){
                     tmp = this.tokens.removeFirst();
-                    if(tmp.getTipo().equals("identificador")){
+                    if(tmp.getTipo().equals("identificador")){  //nombre del placeB
+                        placeB = tmp.getLexema();
                         tmp= this.tokens.removeFirst();
                         if(tmp.getTipo().equals("pr_with")){
                             tmp = this.tokens.removeFirst();
-                            if (tmp.getTipo().equals("pr_camino")){
+                            if (tmp.getTipo().equals("comillas")){
+                                tmp = this.tokens.removeFirst();
+                                if(tmp.getTipo().equals("pr_camino")){
+                                    tipoCamino = tmp.getLexema();
+                                    tmp = this.tokens.removeFirst();
+                                    if (tmp.getTipo().equals("comillas")){
+                                        //Crear un nuevo camino
+                                        //debeo graficar las conexiones del camino enter locaciones
+                                        Conexion conexion = new Conexion(placeA, placeB, tipoCamino);
+                                        this.mundos.get(mundoActual).agregarConexion(tipoCamino,conexion);
 
-                                return;
+                                        return;
+                                    }else{agregarError(tmp);}
+                                }else{agregarError(tmp);}
                             }else{agregarError(tmp);}
                         }else {agregarError(tmp);}
                     }else {agregarError(tmp);}
@@ -277,6 +290,29 @@ public class AnalizadorSintactico {
     }
 
     public void OBJETO(){
+        System.out.println("OBJETO");
+
+        Token tmp = this.tokens.removeFirst();
+
+        if(tmp.getTipo().equals("pr_object")){
+            tmp = this.tokens.removeFirst();
+            if(tmp.getTipo().equals("cadena")){
+                tmp = this.tokens.removeFirst();
+                if(tmp.getTipo().equals("dosPuntos")){
+                    tmp = this.tokens.removeFirst();
+                    if(tmp.getTipo().equals("pr_objectoEspecial")){
+                        tmp = this.tokens.removeFirst();
+                        if(tmp.getTipo().equals("pt_at")){
+                            //puede ser un pace o una coordenada
+                            tmp = this.tokens.removeFirst();
+                            this.LUGAR();
+
+                        }
+                    }
+                }
+            }
+
+        }
 
     }
     public void OBJETOSP(){
@@ -287,6 +323,45 @@ public class AnalizadorSintactico {
         }else{
             return;
         }
+    }
+
+    public void LUGAR(){
+        System.out.println("LUGAR  en objetos");
+        String x;
+        String y;
+        String lugar;
+
+        Token tmp = this.tokens.removeFirst();
+
+        //evaluo si es identificador o coordenadas
+        if (tmp.getTipo().equals("identificador")){
+            //forma 1 de declarar el lugar de los objetos Place
+
+            lugar = tmp.getLexema();
+
+        }else if(tmp.getTipo().equals("parentesisApertura")){
+            //forma 2 de declara el lugar de los objetos (X,Y)
+            tmp = this.tokens.removeFirst();
+            if(tmp.getTipo().equals("numero")){
+                x = tmp.getLexema();
+                tmp = this.tokens.removeFirst();
+                if(tmp.getTipo().equals("coma")){
+                    tmp = this.tokens.removeFirst();
+                    if(tmp.getTipo().equals("numero")){
+                        y = tmp.getLexema();
+                        tmp = this.tokens.removeFirst();
+                        if(tmp.getTipo().equals("parentesisCierre")){
+                            tmp = this.tokens.removeFirst();
+                            return;
+
+                        }else{agregarError(tmp);}
+                    }else {agregarError(tmp);}
+                }else{agregarError(tmp);}
+            }else{agregarError(tmp);}
+        }else{
+            agregarError(tmp);
+        }
+
     }
 
 

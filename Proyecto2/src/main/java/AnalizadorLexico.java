@@ -84,6 +84,8 @@ public class AnalizadorLexico {
             this.columna+=1;
         }else if(caracter == '"'){
             this.buffer+=caracter;
+            //agrego un toke commillas para validarlo en las conexiones
+            this.agregarToken(String.valueOf(caracter),"comillas",this.linea, this.columna);
             this.columna+=1;
             this.estado = 3;
         }else if(Character.isLetter(caracter)){
@@ -142,7 +144,7 @@ public class AnalizadorLexico {
                 this.agregarToken(this.buffer, "pr_with", linea, columna);
             }else if(this.buffer.equals("playa") || this.buffer.equals("cueva") || this.buffer.equals("templo") || this.buffer.equals("jungla") || this.buffer.equals("montana") || this.buffer.equals("pueblo") || this.buffer.equals("isla") || this.buffer.equals("rio") || this.buffer.equals("volcan") || this.buffer.equals("pantano")){
                 this.agregarToken(this.buffer, "pr_locacion", linea, columna);
-            }else if(this.buffer.equals("\"camino\"") || this.buffer.equals("\"puente\"") || this.buffer.equals("sendero") || this.buffer.equals("\"carretera\"") || this.buffer.equals("\"nado\"") || this.buffer.equals("lancha") || this.buffer.equals("teleferico")) {
+            }else if(this.buffer.equals("camino") || this.buffer.equals("puente") || this.buffer.equals("sendero") || this.buffer.equals("carretera") || this.buffer.equals("nado") || this.buffer.equals("lancha") || this.buffer.equals("teleferico")) {
                 this.agregarToken(this.buffer, "pr_camino", linea, columna);
             }else if(this.buffer.equals("object")) {
                 this.agregarToken(this.buffer, "pr_object", linea, columna);
@@ -165,6 +167,12 @@ public class AnalizadorLexico {
             this.buffer+=caracter;
             this.columna+=1;
         }else{
+            this.buffer+= caracter;
+            if (this.buffer.equals("sendero")){
+                // "sendero"hola
+
+            }
+
             //Aceptación
             this.buffer+=caracter;
             this.agregarToken(this.buffer,"cadena",linea, columna);
@@ -182,9 +190,9 @@ public class AnalizadorLexico {
         }
     }*/
 
-
     //inprimo los tokes encontrados
     public void imprimirTokens() {
+        System.out.println("TOKES************************");
         for(Token token: this.tokens){
             System.out.println(token);
         }
@@ -192,6 +200,7 @@ public class AnalizadorLexico {
 
     //imprimo los errores encotrados
     public void imprimirErrores() {
+        System.out.println("ERORRES************************");
         for(Error error: this.errores){
             System.out.println(error);
         }
@@ -275,6 +284,5 @@ public class AnalizadorLexico {
             System.out.println("Error al escribir en el archivo html: " + e.getMessage());
         }
     }
-
 
 }

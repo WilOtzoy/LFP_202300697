@@ -20,7 +20,7 @@ public class GUIApp extends JFrame {
     private JButton tokensReportButton;
     private JButton errorReportButton;
 
-    StringBuilder content = new StringBuilder();
+    //StringBuilder content = new StringBuilder();
 
     AnalizadorLexico analizadorLexico = new AnalizadorLexico();
     AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokens());
@@ -55,7 +55,7 @@ public class GUIApp extends JFrame {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         loadButton = new JButton("Cargar archivo");
         clearButton = new JButton("Limpiar área");
-        analyzeButton = new JButton("Analisar archivo");
+        analyzeButton = new JButton("Analizar archivo");
 
         buttonPanel.add(loadButton);
         buttonPanel.add(clearButton);
@@ -91,8 +91,8 @@ public class GUIApp extends JFrame {
         rightPanel.add(buttonPanelRight, BorderLayout.SOUTH);
 
         // Menú desplegable
-        String[] reportOptions = {"Isla del místico", "Valle de las brujas", "Montaña de dragones"};
-        reportComboBox = new JComboBox<>(reportOptions);
+        String[] mundosList = {"Isla del místico", "Valle de las brujas", "Montaña de dragones"};
+        reportComboBox = new JComboBox<>(mundosList);
         reportComboBox.setSelectedIndex(0);
         rightPanel.add(reportComboBox, BorderLayout.NORTH);
 
@@ -113,13 +113,17 @@ public class GUIApp extends JFrame {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea.setText("");
+
                 analizadorLexico.getTokens().clear();
                 analizadorLexico.getErrores().clear();
                 analizadorSintactico.getErrores().clear();
 
 
-                imageLabel.setText("Área de imagen");
+                //content.setLength(0);
+
+                textArea.setText("");
+                JOptionPane.showMessageDialog(null,"Datos borrados satisfactoriamente!");
+
             }
         });
 
@@ -129,10 +133,17 @@ public class GUIApp extends JFrame {
                 //textArea.setText("Análisis realizado exitosamente.");
                 //analizadorLexico.analizar();
 
-                    //StringBuilder contenido = new StringBuilder(textArea.getText());
+
+                    StringBuilder contenido = new StringBuilder(textArea.getText());
+                    /*content = new StringBuilder();
                     content = new StringBuilder(textArea.getText());
                     //contenido = textArea.getText().toString();
-                    analizadorLexico.analizar(content);
+                    analizadorLexico.analizar(content);*/
+
+                    analizadorLexico.analizar(contenido);
+
+                    analizadorLexico.imprimirTokens();
+                    analizadorLexico.imprimirErrores();
 
                     analizadorSintactico.analizar();
 
@@ -151,7 +162,6 @@ public class GUIApp extends JFrame {
         errorReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("ERORRES************************");
                 analizadorLexico.imprimirErrores();
                 analizadorSintactico.imprimirErroresSintacticos();
 
@@ -164,7 +174,7 @@ public class GUIApp extends JFrame {
         tokensReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("TOKES************************");
+
                 analizadorLexico.imprimirTokens();
 
                 analizadorLexico.reporteTokens();
@@ -172,6 +182,14 @@ public class GUIApp extends JFrame {
             }
         });
 
+        reportComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+                analizadorSintactico.analizar();
+            }
+        });
         // Mostrar la ventana
         setVisible(true);
     }
@@ -188,9 +206,10 @@ public class GUIApp extends JFrame {
 
             //muevo a aca mi path
             try {
-                //File archivo = new File("C:\\Users\\wilso\\Downloads\\Entrada1.lfp");
                 File archivo = new File(ruta);
-                //StringBuilder content = new StringBuilder();
+                //aca el string builder
+                StringBuilder content = new StringBuilder();
+
                 if (archivo.exists()) {
                     BufferedReader br = new BufferedReader(new FileReader(archivo));
                     String linea;
@@ -200,8 +219,12 @@ public class GUIApp extends JFrame {
 
                     System.out.println(content);
                     //Analizo el contenido
+                    //analizadorLexico.analizar(content);
 
                     textArea.setText(content.toString());
+
+                    //analizadorLexico.imprimirTokens();
+                    //analizadorLexico.imprimirErrores();
 
                     //List<Token> tokens = analizadorLexico.getTokens();
                 } else {
